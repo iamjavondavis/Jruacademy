@@ -16,6 +16,9 @@ https://iamjavondavis.github.io/Jruacademy/
 - 80% mastery requirement
 - Locked progression
 - Final Galaxy Boss Battle
+- Question order is randomized each session
+- Multiple-choice answer order is randomized each question
+- Missed math facts are tracked for parent recommendations
 
 ### Quick Challenges
 
@@ -23,6 +26,7 @@ https://iamjavondavis.github.io/Jruacademy/
 - 12 rapid problems per table
 - 144 total multiplication-fact problems
 - Typed-answer format instead of multiple choice
+- Question order is randomized each session
 - Completion timer and best-time tracking
 - Mastery requires at least 10 correct answers out of 12
 - Separate XP, badges, scores, and parent-dashboard tracking
@@ -35,6 +39,15 @@ https://iamjavondavis.github.io/Jruacademy/
 - Main idea, details, sequence, inference, cause and effect, context clues, character traits, compare and contrast, prediction, and problem/solution
 - 75% mastery requirement
 - Locked progression
+- Question order and answer-choice order are randomized
+
+### Anti-pattern learning rules
+
+- Correct answers must not remain in a predictable A, B, C, or D position
+- Questions must not always appear in the same sequence
+- Praise messages rotate to avoid repetitive feedback
+- Missed math facts are stored and prioritized in the Dad Dashboard
+- New multiple-choice lessons should use plausible distractors instead of obviously wrong numbers
 
 ### Parent tools
 
@@ -42,7 +55,7 @@ https://iamjavondavis.github.io/Jruacademy/
 - Badges
 - Best-score tracking
 - Quick-challenge time tracking
-- Skill recommendations
+- Missed-fact recommendations
 - Dad Dashboard
 - Progress export
 
@@ -70,3 +83,4 @@ Progress is currently saved in the browser using `localStorage`. Progress remain
 4. Parent-controlled AI tutor
 5. Weekly progress reports
 6. Expanded 30-story reading curriculum and 40-mission math curriculum
+7. Daily adaptive review using stored missed facts
