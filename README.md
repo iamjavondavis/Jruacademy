@@ -17,6 +17,16 @@ https://iamjavondavis.github.io/Jruacademy/
 - Locked progression
 - Final Galaxy Boss Battle
 
+### Quick Challenges
+
+- Separate drills for multiplication tables 1–12
+- 12 rapid problems per table
+- 144 total multiplication-fact problems
+- Typed-answer format instead of multiple choice
+- Completion timer and best-time tracking
+- Mastery requires at least 10 correct answers out of 12
+- Separate XP, badges, scores, and parent-dashboard tracking
+
 ### Reading Forest
 
 - 10 reading-comprehension stories
@@ -31,6 +41,7 @@ https://iamjavondavis.github.io/Jruacademy/
 - XP and student levels
 - Badges
 - Best-score tracking
+- Quick-challenge time tracking
 - Skill recommendations
 - Dad Dashboard
 - Progress export
@@ -43,6 +54,7 @@ Lesson content is stored separately:
 
 - `data/math-lessons.js`
 - `data/reading-lessons.js`
+- `data/quick-challenges.js`
 
 New lessons can be added to the data files without rebuilding the app interface.
 
