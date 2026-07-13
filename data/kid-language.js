@@ -30,3 +30,17 @@ function simplify(){document.querySelectorAll('button,h1,h2,h3,p,li,th,td,label'
 window.addEventListener('load',()=>{simplify();setTimeout(simplify,700);setTimeout(simplify,1800)});
 new MutationObserver(()=>simplify()).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+(function loadCreatorAcademy(){
+  const script=document.createElement('script');
+  script.src='data/creator-academy.js';
+  script.defer=true;
+  document.head.appendChild(script);
+})();
+
+(function loadAppInstall(){
+  const script=document.createElement('script');
+  script.src='data/app-install.js';
+  script.defer=true;
+  document.head.appendChild(script);
+})();
