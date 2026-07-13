@@ -129,6 +129,7 @@ window.QUICK_CHALLENGES = Array.from({length:12},(_,i)=>{const table=i+1;return 
       cards[first].matched=cards[second].matched=true;
       matches++;first=null;second=null;locked=false;
       document.getElementById('matchMessage').textContent='✅ Match found!';
+      if(window.jruPlaySound)window.jruPlaySound('match');
       render();
       if(matches===6){
         clearInterval(timer);
@@ -137,10 +138,12 @@ window.QUICK_CHALLENGES = Array.from({length:12},(_,i)=>{const table=i+1;return 
         const old=JSON.parse(localStorage.getItem('jruMatchBest')||'null');
         if(!old||moves<old.moves||(moves===old.moves&&seconds<old.seconds))localStorage.setItem('jruMatchBest',JSON.stringify(current));
         document.getElementById('matchMessage').textContent=`🏆 All pairs matched in ${moves} moves and ${seconds} seconds!`;
+        if(window.jruPlaySound)window.jruPlaySound('reward');
         updateBestText();
       }
     }else{
       document.getElementById('matchMessage').textContent='Not a match—remember where those cards are.';
+      if(window.jruPlaySound)window.jruPlaySound('wrong');
       setTimeout(()=>{
         cards[first].open=false;cards[second].open=false;first=null;second=null;locked=false;render();
       },700);
@@ -163,4 +166,11 @@ window.QUICK_CHALLENGES = Array.from({length:12},(_,i)=>{const table=i+1;return 
       }
     };
   });
+})();
+
+(function loadUIUpgrade(){
+  const script=document.createElement('script');
+  script.src='data/ui-upgrade.js';
+  script.defer=true;
+  document.head.appendChild(script);
 })();
