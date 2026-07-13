@@ -45,9 +45,16 @@ new MutationObserver(()=>simplify()).observe(document.documentElement,{childList
   document.head.appendChild(script);
 })();
 
-(function loadGarageBandWorkflow(){
+(function loadMusicWorkflow(){
   const script=document.createElement('script');
-  script.src='data/garageband-launch.js';
+  script.src='data/music-workflow.js';
+  script.defer=true;
+  document.head.appendChild(script);
+})();
+
+(function loadRoblox3DLab(){
+  const script=document.createElement('script');
+  script.src='data/roblox-3d-lab.js';
   script.defer=true;
   document.head.appendChild(script);
 })();
