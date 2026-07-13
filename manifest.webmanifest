@@ -1,0 +1,19 @@
+{
+  "name": "Jru Academy",
+  "short_name": "Jru Academy",
+  "description": "A kid-friendly learning and creator academy for math, reading, coding, music, design, and games.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#05070c",
+  "theme_color": "#0b2e63",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/jru-academy-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
