@@ -52,6 +52,18 @@ https://iamjavondavis.github.io/Jruacademy/
 - Guided build tasks, starter Lua code, checkpoint quizzes, XP, locked progression, and developer badges
 - Originality and child-safety reminders included throughout
 
+### 3D Avatar Studio
+
+- Interactive WebGL block-style character
+- Drag to rotate the character
+- Pinch or scroll to zoom
+- Live skin tone, hair, shirt, pants, shoes, and accessory changes
+- 20 ready-made outfit presets
+- Random outfit button
+- Up to 10 saved looks on the current device
+- Reward sounds for selections and saved outfits
+- Uses original character parts and styles
+
 ### Academy Worlds
 
 The complete-school expansion adds project-based learning across:
@@ -82,7 +94,7 @@ The complete-school expansion adds project-based learning across:
 - Badges
 - Best-score and best-time tracking
 - Missed-fact recommendations
-- Math, reading, quick-table, Roblox, Academy Worlds, and Memory Match progress
+- Math, reading, quick-table, Roblox, Academy Worlds, Memory Match, and Avatar Studio progress
 - Parents Dashboard and progress export
 
 ## Content architecture
@@ -94,6 +106,7 @@ The app engine is stored in `index.html`. Lesson content is stored separately:
 - `data/quick-challenges.js`
 - `data/roblox-course.js`
 - `data/academy-expansion.js`
+- `data/avatar-studio.js`
 
 ## Progress storage
 
