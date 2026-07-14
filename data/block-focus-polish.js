@@ -27,7 +27,8 @@
       #focusView .focus-board{height:clamp(420px,68dvh,760px)!important;width:auto!important;max-width:94vw!important;aspect-ratio:10/18!important;margin:0 auto!important;padding:6px!important;border-radius:14px!important}
       #focusView .focus-board,#focusView .focus-controls,#focusView .focus-controls button{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
       #focusView .focus-controls{display:grid!important;grid-template-columns:repeat(4,minmax(62px,82px))!important;gap:8px!important;margin-top:2px!important;justify-content:center!important}
-      #focusView .focus-controls button{width:100%;min-width:62px;min-height:58px;font-size:27px;margin:0!important}
+      #focusView .focus-controls button{width:100%;min-width:62px;min-height:58px;font-size:27px;margin:0!important;transition:none!important}
+      #focusView .focus-controls button.is-pressed{transform:translateY(2px) scale(.97)!important;filter:brightness(1.2)}
       #focusView .focus-panel{width:min(94vw,620px)!important;padding:10px 12px!important;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:center}
       #focusView .focus-panel h2{display:none}
       #focusView .focus-panel .big{font-size:18px!important;margin:0;text-align:center}
@@ -38,7 +39,6 @@
       #focusView .focus-panel .focus-tip:last-child{display:none}
       #focusView .focus-board.line-flash{animation:focusFlash .42s ease}
       #focusView .focus-board.block-pop{animation:blockPop .18s ease}
-      #focusView .focus-cell.filled{transition:transform .12s ease,filter .12s ease}
       #focusView .focus-cell.filled:nth-child(3n){filter:brightness(1.15)}
       .focus-extra-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
       .focus-stat-box{background:#071a33;border:1px solid #1d74d7;border-radius:10px;padding:7px;text-align:center;font-size:13px}
@@ -67,8 +67,7 @@
         #focusView .focus-controls span{display:none!important}
         #focusView .focus-controls button{min-width:78px!important;min-height:64px!important;font-size:28px!important}
         #focusView .focus-panel{width:100%!important;max-width:310px!important;grid-template-columns:1fr 1fr!important;gap:8px!important;position:sticky;top:72px}
-        #focusView .focus-panel .focus-extra-stats{grid-column:1/-1}
-        #focusView .focus-panel #focusMessage{grid-column:1/-1}
+        #focusView .focus-panel .focus-extra-stats,#focusView .focus-panel #focusMessage{grid-column:1/-1}
         #focusView .focus-panel>button{grid-column:span 1}
       }
 
@@ -98,13 +97,46 @@
     const draw=()=>music.textContent=musicOn?'🎵 Music On':'🎵 Music Off';draw();
     music.onclick=()=>{musicOn=!musicOn;localStorage.setItem(MUSIC_KEY,String(musicOn));draw();musicOn?startMusic():stopMusic()};
     firstButton.insertAdjacentElement('afterend',music);
-    const tip=document.getElementById('focusMessage');if(tip)tip.textContent='Use ↺ and ↻ to turn the shape. The controls stay beside the board in landscape.';
+    const tip=document.getElementById('focusMessage');if(tip)tip.textContent='Tap for one move. Hold left, right, or down for fast movement.';
   }
 
-  function protectControls(){
-    const controls=document.querySelector('#focusView .focus-controls');if(!controls)return;
-    ['touchstart','touchmove','touchend','gesturestart','dblclick'].forEach(type=>controls.addEventListener(type,e=>e.preventDefault(),{passive:false}));
-    controls.querySelectorAll('button').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture?.(e.pointerId)}));
+  function installInstantControls(){
+    const controls=document.querySelector('#focusView .focus-controls');
+    if(!controls||controls.dataset.instantReady==='true')return;
+    controls.dataset.instantReady='true';
+    let repeatDelay=null,repeatTimer=null,activeButton=null;
+    const stop=()=>{
+      clearTimeout(repeatDelay);clearInterval(repeatTimer);repeatDelay=null;repeatTimer=null;
+      if(activeButton)activeButton.classList.remove('is-pressed');activeButton=null;
+    };
+    const actionFor=button=>{
+      const label=(button.getAttribute('aria-label')||'').toLowerCase();
+      if(label.includes('turn left'))return {run:()=>window.focusRotateLeft?.(),repeat:false};
+      if(label.includes('turn right'))return {run:()=>window.focusRotate?.(),repeat:false};
+      if(label.includes('move left'))return {run:()=>window.focusMove?.(-1),repeat:true};
+      if(label.includes('move right'))return {run:()=>window.focusMove?.(1),repeat:true};
+      if(label.includes('move down'))return {run:()=>window.focusDown?.(),repeat:true};
+      if(label.includes('drop'))return {run:()=>window.focusDrop?.(),repeat:false};
+      return null;
+    };
+    controls.querySelectorAll('button').forEach(button=>{
+      button.removeAttribute('onclick');
+      button.addEventListener('pointerdown',event=>{
+        event.preventDefault();event.stopPropagation();stop();
+        const action=actionFor(button);if(!action)return;
+        activeButton=button;button.classList.add('is-pressed');button.setPointerCapture?.(event.pointerId);
+        action.run();
+        if(action.repeat){
+          repeatDelay=setTimeout(()=>{repeatTimer=setInterval(action.run,75)},190);
+        }
+      },{passive:false});
+      button.addEventListener('pointerup',stop,{passive:true});
+      button.addEventListener('pointercancel',stop,{passive:true});
+      button.addEventListener('lostpointercapture',stop,{passive:true});
+      button.addEventListener('contextmenu',event=>event.preventDefault());
+    });
+    window.addEventListener('blur',stop);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   }
 
   function watchBoard(){
@@ -118,7 +150,7 @@
 
   window.addEventListener('load',()=>{
     addStyles();
-    setTimeout(()=>{installUI();protectControls();watchBoard()},900);
+    setTimeout(()=>{installUI();installInstantControls();watchBoard()},900);
     document.addEventListener('visibilitychange',()=>document.hidden?stopMusic():(document.getElementById('focusView')&&!document.getElementById('focusView').classList.contains('hidden')&&startMusic()));
     document.addEventListener('click',()=>{const view=document.getElementById('focusView');if(view&&!view.classList.contains('hidden'))startMusic()},{once:true});
   });
